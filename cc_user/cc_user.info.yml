@@ -1,0 +1,5 @@
+name: 'CC User'
+description: 'A User Module for Chess Concierge'
+package: 'CC'
+type: 'module'
+core: '8.x'
