@@ -1,4 +1,8 @@
 <?php 
+/**
+ * @file
+ * Contains \Drupal\cc_user.
+ */
 
 namespace Drupal\cc_user;
 
@@ -24,19 +28,10 @@ class ccUser {
     $user->activate();
     
     $result = $user->save();
-    
-    $this->id = $user->uid;
-    
+    user_login_finalize($user);
+        
     return $result;
     
-    //need to add a return result section
-    //add comments about process
-  }
-  
-  public function logInUser () {  
-    //log user in if they are succesfully created
-    $user = User::load($this->id);
-    user_login_finalize($user);
   }
   
 }

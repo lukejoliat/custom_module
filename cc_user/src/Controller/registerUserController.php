@@ -10,9 +10,6 @@ use Drupal\cc_user\ccUser;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-//add 'controller' to name of file
-//here-docs controller base documentation
-
 class registerUserController extends ControllerBase {
   
   public function register () {
@@ -30,11 +27,22 @@ class registerUserController extends ControllerBase {
     $user->password = $json['password'];
     $user->phone = $json['phone'];
     
-    $result = $user->createUser();
+    $users = user_load_multiple($uids = NULL, $reset = FALSE);
+    $usernames = array();
+    foreach ($users as $key => $value) {
+      $usernames[] = $value->getUserName();
+    }
     
-    $json['id'] = $user->id->value;
-        
-    return new JsonResponse($json);
+    $json['usernames'] = $usernames;
+    
+    if (in_array($user->name, $usernames)) {
+      $error = "Please try a different user name.";
+      return new JsonResponse($error);
+    } else {
+      $result = $user->createUser();
+      return new JsonResponse($json);
+
+    }   
     
   }
 }

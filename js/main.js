@@ -12,11 +12,16 @@ jQuery(function ($) {
       "/add-user?_format=json",
       { username: username, password: password, email: email, phone: phone }
     ).done(function (data) {
-      $.colorbox.close();
+      if (data == 'Please try a different user name.') {
+        $('#cboxLoadedContent h2').prepend('<div>Error: ' + data + '');  
+      } else {
+        $.colorbox.close();
+        location.reload();
+      }
       console.log(data);
     });
   }
-  
+    
   //Colorbox Open on Click Function.
   //Defines colorbox html content.
   //Creates allows submit user function to run on 'submit' click.
@@ -32,11 +37,15 @@ jQuery(function ($) {
 			height: 500,
 			width: 500,
 			onComplete: function () {
-        //call function to submit the entered data when the user clicks the 'add button'
         $('#submit-colorbox').click(function() {
-          submitUser();
+          if ($('input#email').val().indexOf("@") !== -1) {
+            submitUser();
+          } else {
+            $('#cboxLoadedContent h2').prepend('<div>Error: Please include a correctly formatted email address.');   
+          }
         });
 			}
 		});
   });
+
 });
